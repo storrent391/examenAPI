@@ -3,7 +3,19 @@ using System.IO;
 
 namespace Spotify.Services;
 public class Metadades
+{   
+    private static async Task LlegirMetadades(List<string> classificacio)
 {
+    var tasques = new List<Task>();
+
+    for (int i = 1; i <= NumFiles; i++)
+    {
+       
+        tasques.Add(Task.Run(() => CursaCamellIndividual(nom, classificacio)));
+    }
+
+    await Task.WhenAll(tasques); 
+}
     public MediaService()
     {
         _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
@@ -15,14 +27,14 @@ public class Metadades
     public static void Main(string[] args, Guid songId, IFormFile file)
     {
         String filePath = await SaveImage(songId, file);
-        string rutaDelArchivo = @"C:\Users\Usuario\Documentos\mi_archivo.txt";
+        
 
 
-        string nombreCompleto = Path.GetFileName(rutaDelArchivo);
+        string nombreCompleto = Path.GetFileName(filePath);
         Console.WriteLine($"Nombre completo: {nombreCompleto}");
 
 
-        string nombreSinExtension = Path.GetFileNameWithoutExtension(rutaDelArchivo);
+        string nombreSinExtension = Path.GetFileNameWithoutExtension(filePath);
         Console.WriteLine($"Nombre sin extensión: {nombreSinExtension}");
     }
     private static async Task<string> SaveImage(Guid id, IFormFile image)
