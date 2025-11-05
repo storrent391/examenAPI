@@ -22,6 +22,13 @@ public static class UserEndpoints
                 ? Results.Ok(user)
                 : Results.NotFound(new { message = $"User with Id {id} not found." });
         });
+        // app.MapGet("/user/{id}/profiles", (Guid id) =>
+        // {
+        //     Profile user = UserADO.GetById(dbConn, id);
+        //     return user is not null
+        //         ? Results.Ok(user)
+        //         : Results.NotFound(new { message = $"User with Id {id} not found." });
+        // });
 
         // POST /user
         app.MapPost("/user", (UserRequest req) =>

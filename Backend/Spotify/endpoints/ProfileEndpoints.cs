@@ -7,55 +7,51 @@ public static class ProfileEndpoints
 {
     public static void MapProfileEndpoints(this WebApplication app, DatabaseConnection dbConn)
     {
-        // GET /users
-        app.MapGet("/profiles", () =>
+        
+
+        
+        app.MapGet("/profile{id}", (Guid id) =>
         {
-            List<User> users = UserADO.GetAll(dbConn);
-            return Results.Ok(users);
+            Profile profile = ProfileADO.GetById(dbConn, id);
+            return profile is not null
+                ? Results.Ok(profile)
+                : Results.NotFound(new { message = $"Profile with Id {id} not found." });
         });
 
-        // GET /user/{id}
-        app.MapGet("/user/{id}/profiles", (Guid id) =>
+        // POST /profile
+        app.MapPost("/profile", (ProfileRequest req) =>
         {
-            User user = UserADO.GetById(dbConn, id);
-            return user is not null
-                ? Results.Ok(user)
-                : Results.NotFound(new { message = $"User with Id {id} not found." });
-        });
-
-        // POST /user
-        app.MapPost("/user", (UserRequest req) =>
-        {
-            User user = new User
+            Profile profile = new Profile
             {
                 Id = Guid.NewGuid(),
                 Name = req.Name,
-                Password = req.Password,
-                Salt = req.Salt,
+                Description = req.Description,
+                Status = req.Status,
+                User_Id = req.User_Id,
             };
 
-            UserADO.Insert(dbConn, user);
-            return Results.Created($"/user/{user.Id}", user);
+            ProfileADO.Insert(dbConn, profile);
+            return Results.Created($"/profile/{profile.Id}", profile);
         });
 
-        // PUT /user/{id}
-        app.MapPut("/user/{id}", (Guid id, UserRequest req) =>
+        // PUT /profile/{id}
+        app.MapPut("/profile/{id}", (Guid id, ProfileRequest req) =>
         {
-            var existing = UserADO.GetById(dbConn, id);
+            var existing = ProfileADO.GetById(dbConn, id);
             if (existing == null)
                 return Results.NotFound();
 
             existing.Name = req.Name;
-            existing.Password = req.Password;
-            existing.Salt = req.Salt;
+            existing.Description = req.Description;
+            existing.Status = req.Status;
 
-            UserADO.Update(dbConn, existing);
+            ProfileADO.Update(dbConn, existing);
             return Results.Ok(existing);
         });
 
-        // DELETE /user/{id}
-        app.MapDelete("/user/{id}", (Guid Id) => UserADO.Delete(dbConn, Id) ? Results.NoContent() : Results.NotFound());
+        // DELETE /profile/{id}
+        app.MapDelete("/profile/{id}", (Guid Id) => ProfileADO.Delete(dbConn, Id) ? Results.NoContent() : Results.NotFound());
     }
 }
 
-public record UserRequest(Guid Id, string Name, string Password, string Salt);
+public record ProfileRequest(Guid Id, string Name, string Description, int Status, Guid User_Id);
