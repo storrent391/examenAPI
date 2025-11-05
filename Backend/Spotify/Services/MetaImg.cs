@@ -1,8 +1,9 @@
 using System;
 using System.IO;
 
-public class Ejemplo
-{   
+namespace Spotify.Services;
+public class Metadades
+{
     public MediaService()
     {
         _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
@@ -11,7 +12,7 @@ public class Ejemplo
             Directory.CreateDirectory(_uploadsFolder);
     }
 
-    public static void Main(string[] args, )
+    public static void Main(string[] args, Guid songId, IFormFile file)
     {
         String filePath = await SaveImage(songId, file);
         string rutaDelArchivo = @"C:\Users\Usuario\Documentos\mi_archivo.txt";
@@ -34,7 +35,7 @@ public class Ejemplo
         string fileName = $"{id}_{Path.GetFileName(image.FileName)}";
         string filePath = Path.Combine(uploadsFolder, fileName);
 
-        using (FileStream stream = new FileStream(filePath, FileMode.Create)) 
+        using (FileStream stream = new FileStream(filePath, FileMode.Create))
         {
             await image.CopyToAsync(stream);
         }
