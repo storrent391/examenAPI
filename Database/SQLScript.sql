@@ -67,7 +67,7 @@ CREATE TABLE Profiles (
     ID UNIQUEIDENTIFIER PRIMARY KEY,
     Name NVARCHAR(30),
     Description NVARCHAR(200),
-    Status INT,
+    Status NVARCHAR(1),
     User_ID UNIQUEIDENTIFIER NOT NULL,
     FOREIGN KEY (User_ID) REFERENCES Users(ID),
 );

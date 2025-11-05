@@ -54,4 +54,4 @@ public static class ProfileEndpoints
     }
 }
 
-public record ProfileRequest(Guid Id, string Name, string Description, int Status, Guid User_Id);
+public record ProfileRequest(Guid Id, string Name, string Description, string Status, Guid User_Id);

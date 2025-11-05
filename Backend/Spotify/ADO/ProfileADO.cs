@@ -55,10 +55,10 @@ public class ProfileADO
     public static Profile? GetById(DatabaseConnection dbConn, Guid id)
     {
         dbConn.Open();
-        string sql = "SELECT Id, Name, Description, Status, User_Id FROM Profiles WHERE User_Id = @User_Id";
+        string sql = "SELECT Id, Name, Description, Status, User_Id FROM Profiles WHERE Id = @Id";
 
         using SqlCommand cmd = new SqlCommand(sql, dbConn.sqlConnection);
-        cmd.Parameters.AddWithValue("@User_Id", id);
+        cmd.Parameters.AddWithValue("@Id", id);
 
         using SqlDataReader reader = cmd.ExecuteReader();
         Profile? profile = null;
